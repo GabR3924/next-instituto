@@ -97,7 +97,7 @@ const Formulario = () => {
         "telefono",
         `${formData.telefonoCodigo}${formData.telefono}`
       );
-      formDataToSend.append("correo", formData.ciudad);
+      formDataToSend.append("correo", formData.correo);
       formDataToSend.append("estado", formData.estado);
       formDataToSend.append("direccion", formData.ciudad);
       formDataToSend.append("plan", selectedPlan.nombre);

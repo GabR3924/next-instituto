@@ -34,7 +34,7 @@ const Nav = () => {
             <Link href="/">
               <Button color="inherit">Inicio</Button>
             </Link>
-            <Link href="/#info">
+            <Link href="/Formulario">
               <Button color="inherit">Servicios</Button>
             </Link>
             <Link href="/#plans">

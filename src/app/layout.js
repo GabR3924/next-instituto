@@ -1,6 +1,7 @@
 import localFont from "next/font/local";
 import "./globals.css";
 import { DataProvider } from "@/Context/DataContext";
+import { PlanProvider } from "@/Context/PlanContex";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -20,12 +21,14 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <DataProvider>      
-    <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable}`}>
-        {children}
-      </body>
-    </html>
-    </DataProvider>  
+    <DataProvider>
+      <PlanProvider>
+        <html lang="en">
+          <body className={`${geistSans.variable} ${geistMono.variable}`}>
+            {children}
+          </body>
+        </html>
+      </PlanProvider>
+    </DataProvider>
   );
 }

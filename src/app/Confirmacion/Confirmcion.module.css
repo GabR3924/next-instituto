@@ -1,0 +1,97 @@
+.confirmation {
+    padding: 20px;
+    background-color: #f4f7fa; /* Color de fondo suave */
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+  
+  .boldText {
+    font-weight: bold;
+    color: #333; /* Color oscuro para el texto importante */
+  }
+  
+  .tableContainer {
+    margin: 20px 0;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+  
+  .paragraph {
+    margin: 20px 0;
+    color: #555;
+  }
+  
+  .contacto, .location {
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+  }
+  
+  .contactInfo {
+    margin: 5px 0;
+    color: #555;
+  }
+  
+  .locationText {
+    margin-left: 8px;
+    color: #555;
+  }
+  
+  .logo {
+    margin-top: 30px;
+    text-align: center;
+  }
+  
+  .buttons {
+    margin-top: 30px;
+    text-align: center;
+  }
+  
+  .button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .button:hover {
+    background-color: #0056b3;
+  }
+
+  .contacto {
+    display: flex;
+    flex-direction: column;
+    gap: 15px; /* Espaciado entre los elementos */
+    align-items: flex-start;
+    margin-top: 20px;
+  }
+  
+  .contactItem {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* Espaciado entre el icono y el texto */
+  }
+  
+  .contactInfo {
+    color: #555;
+    font-size: 14px; /* Ajuste de tamaño para una mejor lectura en dispositivos móviles */
+  }
+  
+  @media (max-width: 768px) {
+    .contacto {
+      padding: 0 15px; /* Espacio en los laterales para dispositivos pequeños */
+    }
+  
+    .contactItem {
+      justify-content: center;
+      gap: 12px;
+    }
+  
+    .contactInfo {
+      font-size: 16px; /* Aumenta el tamaño del texto en pantallas más pequeñas */
+    }
+  }
+  

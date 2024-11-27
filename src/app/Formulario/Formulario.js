@@ -1,11 +1,27 @@
 "use client";
-
+import { useRouter } from 'next/navigation'; // Hook de navegación de Next.js
 import React, { useState } from "react";
-import { TextField, Button, Select, MenuItem, InputLabel, FormControl, Typography, Stepper, Step, StepLabel, Box } from "@mui/material";
+import {
+  TextField,
+  Button,
+  Select,
+  MenuItem,
+  InputLabel,
+  FormControl,
+  Typography,
+  Stepper,
+  Step,
+  StepLabel,
+  Box,
+} from "@mui/material";
 import { usePlanContext } from "@/Context/PlanContex"; // Contexto para obtener el plan seleccionado
+import axios from "axios";
 
 const Formulario = () => {
+  const router = useRouter(); // Instancia del hook useRouter
+  
   const { selectedPlan } = usePlanContext(); // Obtener el plan seleccionado del contexto
+  const [loading, setLoading] = useState(false); // Definimos el estado de carga (loading)
 
   // Estado para controlar el paso actual
   const [currentStep, setCurrentStep] = useState(0);
@@ -15,14 +31,15 @@ const Formulario = () => {
     nombre: "",
     apellido: "",
     fechaNacimiento: "",
-    genero: "",
+    direccion: "",
     estado: "",
-    ciudad: "",
+    correo: "",
     cedulaImagen: null,
     banco: "",
     cedula: "",
     telefono: "",
     referencia: "",
+    telefonoCodigo: "412", // Código de área predeterminado
   });
 
   const steps = ["Información Personal", "Detalles del Pago"];
@@ -30,6 +47,10 @@ const Formulario = () => {
   // Manejar cambios en los campos
   const handleChange = (e) => {
     const { name, value } = e.target;
+
+    // Mostrar en consola el valor del campo y el estado actualizado
+    console.log(`Campo actualizado: ${name} = ${value}`);
+
     setFormData((prevData) => ({
       ...prevData,
       [name]: value,
@@ -39,23 +60,147 @@ const Formulario = () => {
   // Manejar archivo de cédula
   const handleFileChange = (e) => {
     const file = e.target.files[0];
+
+    // Mostrar en consola el archivo seleccionado
+    console.log("Archivo de cédula seleccionado:", file);
+
     setFormData((prevData) => ({
       ...prevData,
       cedulaImagen: file,
     }));
-
-    console.log(file)
   };
 
   // Navegar entre pasos
-  const nextStep = () => setCurrentStep((prev) => Math.min(prev + 1, steps.length - 1));
+  const nextStep = () =>
+    setCurrentStep((prev) => Math.min(prev + 1, steps.length - 1));
   const prevStep = () => setCurrentStep((prev) => Math.max(prev - 1, 0));
 
   // Enviar formulario
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const handleSubmit = async (e) => {
+    e.preventDefault(); // Evita el comportamiento por defecto del formulario
     console.log("Datos del formulario:", formData);
-    // Aquí puedes enviar los datos al backend
+
+    // Llamar a la función de pago y esperar su resultado
+    const pagoExitoso = await handleGuardarPago();
+
+    if (pagoExitoso) {
+      // Si el pago fue exitoso, prepara los datos para enviar
+      console.log("Enviando datos del formulario...");
+
+      // Crear instancia de FormData
+      const formDataToSend = new FormData();
+      formDataToSend.append("cedula_propietario", formData.cedula);
+      formDataToSend.append("nombre_propietario", formData.nombre);
+      formDataToSend.append("apellido_propietario", formData.apellido);
+      formDataToSend.append("fecha_nacimiento", formData.fechaNacimiento);
+      formDataToSend.append(
+        "telefono",
+        `${formData.telefonoCodigo}${formData.telefono}`
+      );
+      formDataToSend.append("correo", formData.ciudad);
+      formDataToSend.append("estado", formData.estado);
+      formDataToSend.append("direccion", formData.ciudad);
+      formDataToSend.append("plan", selectedPlan.nombre);
+      formDataToSend.append("paymentData_referencia", formData.referencia);
+      formDataToSend.append("paymentData_monto", selectedPlan.bolivares);
+      formDataToSend.append("paymentData_banco", formData.banco);
+      // Agregar archivo solo si existe
+      if (formData.cedulaImagen) {
+        formDataToSend.append("imagen_cedula", formData.cedulaImagen);
+      }
+
+      try {
+        // Enviar datos al backend
+        const response = await axios.post(
+          "https://rcv.gocastgroup.com:2053/vivirseguros/universitario",
+          formDataToSend,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
+        console.log("Datos enviados con éxito:", response.data);
+
+        // Redirigir a la página de confirmación
+        // router.push({
+        //   pathname: "/Confirmacion",
+        //   query: formData, // Pasamos los datos como parámetros de la URL
+        // });
+        router.push('/Confirmacion'); // Redirige a la página de confirmación
+
+      } catch (error) {
+        alert("Error al enviar los datos, intente más tarde");
+        console.error("Error al enviar los datos:", error);
+      }
+    } else {
+      // Si el pago falló, manejar error
+      console.log("No se completó el pago, el formulario no será enviado.");
+    }
+  };
+
+  // Modificación de handleGuardarPago para que devuelva un valor booleano indicando éxito o fracaso
+  const handleGuardarPago = async () => {
+    setLoading(true); // Inicia el ícono de carga
+    const { banco, telefono, referencia, telefonoCodigo } = formData;
+    const monto = selectedPlan.bolivares;
+    const telefonoCompleto = `58${telefonoCodigo}${telefono}`; // Concatenar el código con el número
+    console.log(monto, banco, telefonoCompleto, referencia);
+    // Validación de campos
+    if (!monto || !banco || !telefonoCompleto || !referencia) {
+      setLoading(false); // Detiene el ícono de carga
+      alert("Por favor, completa todos los campos antes de continuar."); // Alerta para campos incompletos
+      return false; // Detiene el proceso si falta algún dato
+    }
+
+    try {
+      const response = await axios.post(
+        "https://apidev.gocastgroup.com/api/bnc/p2p.php",
+        {
+          montop2p: monto,
+          banco: banco,
+          telefono: telefonoCompleto,
+          Reference: referencia,
+          clienteNombre: "VivirSeguros",
+        }
+      );
+
+      setLoading(false); // Detiene el ícono de carga
+      console.log("respuesta completa", response.data);
+      console.log("res api message", response.data.message);
+
+      if (response && response.data.status === "success") {
+        // handlePaymentData({
+        //   fecha: new Date(),
+        //   referencia: response.data.reference || referencia,
+        //   monto: monto,
+        //   banco: selectedBanco,
+        // });
+
+        // setPagoMovilResponse({
+        //   message: response.data.message || "Transacción completada con éxito.",
+        //   additionalMessage: "Haga clic en 'Enviar' para completar el proceso.",
+        // });
+        console.log("pago completado", response.data);
+        return true; // Indica que el pago fue exitoso
+      } else {
+        console.error(
+          "Error en la transacción:",
+          response.data.message || "Error desconocido."
+        );
+        return false; // El pago falló
+      }
+    } catch (error) {
+      setLoading(false); // Detiene el ícono de carga
+      // setPagoMovilResponse({
+      //   message: "Error en tu transacción",
+      //   additionalMessage:
+      //     error.response?.data?.message || "No se pudo completar el pago",
+      //   reference: "N/A",
+      // });
+      console.error("Error al hacer el POST a la API:", error);
+      return false; // El pago falló
+    }
   };
 
   return (
@@ -68,9 +213,15 @@ const Formulario = () => {
       {selectedPlan && (
         <Box sx={{ mb: 2, p: 2, border: "1px solid #ccc", borderRadius: 2 }}>
           <Typography variant="h6">Plan Seleccionado</Typography>
-          <Typography><strong>Nombre:</strong> {selectedPlan.title}</Typography>
-          <Typography><strong>Precio:</strong> ${selectedPlan.precio}</Typography>
-          <Typography><strong>Precio:</strong> ${selectedPlan.bolivares}</Typography>
+          <Typography>
+            <strong>Nombre:</strong> {selectedPlan.title}
+          </Typography>
+          <Typography>
+            <strong>Precio:</strong> ${selectedPlan.precio}
+          </Typography>
+          <Typography>
+            <strong>Precio:</strong> ${selectedPlan.bolivares}
+          </Typography>
         </Box>
       )}
 
@@ -116,42 +267,60 @@ const Formulario = () => {
               required
             />
             <FormControl fullWidth margin="normal">
-              <InputLabel id="genero-label">Género</InputLabel>
+              <InputLabel id="estado-label">Estado</InputLabel>
               <Select
-                labelId="genero-label"
-                name="genero"
-                value={formData.genero}
+                labelId="estado-label"
+                name="estado"
+                value={formData.estado}
                 onChange={handleChange}
                 required
               >
-                <MenuItem value="masculino">Masculino</MenuItem>
-                <MenuItem value="femenino">Femenino</MenuItem>
-                <MenuItem value="otro">Otro</MenuItem>
+                <MenuItem value="Amazonas">Amazonas</MenuItem>
+                <MenuItem value="Anzoátegui">Anzoátegui</MenuItem>
+                <MenuItem value="Apure">Apure</MenuItem>
+                <MenuItem value="Aragua">Aragua</MenuItem>
+                <MenuItem value="Barinas">Barinas</MenuItem>
+                <MenuItem value="Bolívar">Bolívar</MenuItem>
+                <MenuItem value="Carabobo">Carabobo</MenuItem>
+                <MenuItem value="Cojedes">Cojedes</MenuItem>
+                <MenuItem value="Delta Amacuro">Delta Amacuro</MenuItem>
+                <MenuItem value="Distrito Capital">Distrito Capital</MenuItem>
+                <MenuItem value="Falcón">Falcón</MenuItem>
+                <MenuItem value="Guárico">Guárico</MenuItem>
+                <MenuItem value="La Guaira">La Guaira</MenuItem>
+                <MenuItem value="Lara">Lara</MenuItem>
+                <MenuItem value="Miranda">Miranda</MenuItem>
+                <MenuItem value="Monagas">Monagas</MenuItem>
+                <MenuItem value="Mérida">Mérida</MenuItem>
+                <MenuItem value="Nueva Esparta">Nueva Esparta</MenuItem>
+                <MenuItem value="Portuguesa">Portuguesa</MenuItem>
+                <MenuItem value="Sucre">Sucre</MenuItem>
+                <MenuItem value="Trujillo">Trujillo</MenuItem>
+                <MenuItem value="Táchira">Táchira</MenuItem>
+                <MenuItem value="Yaracuy">Yaracuy</MenuItem>
+                <MenuItem value="Zulia">Zulia</MenuItem>
               </Select>
             </FormControl>
+
             <TextField
               fullWidth
-              label="Estado"
-              name="estado"
-              value={formData.estado}
+              label="Direccion"
+              name="direccion"
+              value={formData.direccion}
               onChange={handleChange}
               margin="normal"
               required
             />
             <TextField
               fullWidth
-              label="Ciudad"
-              name="ciudad"
-              value={formData.ciudad}
+              label="Correo"
+              name="correo"
+              value={formData.correo}
               onChange={handleChange}
               margin="normal"
               required
             />
-            <Button
-              variant="contained"
-              component="label"
-              sx={{ mt: 2 }}
-            >
+            <Button variant="contained" component="label" sx={{ mt: 2 }}>
               Subir Imagen de Cédula
               <input
                 type="file"
@@ -166,7 +335,10 @@ const Formulario = () => {
 
         {currentStep === 1 && (
           <Box>
-            <Typography><strong>Precio del Plan:</strong> ${selectedPlan?.precio || "N/A"}</Typography>
+            <Typography>
+              <strong>Precio del Plan:</strong> $
+              {selectedPlan?.bolivares || "N/A"}
+            </Typography>
             <FormControl fullWidth margin="normal">
               <InputLabel id="banco-label">Banco</InputLabel>
               <Select
@@ -176,11 +348,39 @@ const Formulario = () => {
                 onChange={handleChange}
                 required
               >
-                <MenuItem value="banco1">Banco 1</MenuItem>
-                <MenuItem value="banco2">Banco 2</MenuItem>
-                <MenuItem value="banco3">Banco 3</MenuItem>
+                <MenuItem value="0102">Banco de Venezuela</MenuItem>
+                <MenuItem value="0105">Banco Mercantil</MenuItem>
+                <MenuItem value="0104">Banco Venezolano de Crédito</MenuItem>
+                <MenuItem value="0108">BBVA Banco Provincial</MenuItem>
+                <MenuItem value="0114">BanCaribe</MenuItem>
+                <MenuItem value="0115">Banco Exterior</MenuItem>
+                <MenuItem value="0128">Banco Caroní</MenuItem>
+                <MenuItem value="0134">Banesco</MenuItem>
+                <MenuItem value="0137">Banco Sofitasa</MenuItem>
+                <MenuItem value="0138">Banco Plaza</MenuItem>
+                <MenuItem value="0146">BanGente</MenuItem>
+                <MenuItem value="0151">Banco Fondo Común (BFC)</MenuItem>
+                <MenuItem value="0156">100% Banco</MenuItem>
+                <MenuItem value="0157">Del Sur</MenuItem>
+                <MenuItem value="0163">Banco del Tesoro</MenuItem>
+                <MenuItem value="0175">
+                  Banco Digital para los Trabajadores
+                </MenuItem>
+                <MenuItem value="0166">Banco Agrícola de Venezuela</MenuItem>
+                <MenuItem value="0168">BanCrecer, Banco de Desarrollo</MenuItem>
+                <MenuItem value="0169">
+                  Mi Banco, Banco Microfinanciero
+                </MenuItem>
+                <MenuItem value="0171">Banco Activo</MenuItem>
+                <MenuItem value="0172">Bancamiga Banco Universal</MenuItem>
+                <MenuItem value="0174">BanPlus, Banco Comercial</MenuItem>
+                <MenuItem value="0177">Banco de las Fuerzas Armadas</MenuItem>
+                <MenuItem value="0191">
+                  Banco Nacional de Crédito, C.A. Banco Universal
+                </MenuItem>
               </Select>
             </FormControl>
+
             <TextField
               fullWidth
               label="Número de Cédula"
@@ -190,15 +390,34 @@ const Formulario = () => {
               margin="normal"
               required
             />
-            <TextField
-              fullWidth
-              label="Teléfono"
-              name="telefono"
-              value={formData.telefono}
-              onChange={handleChange}
-              margin="normal"
-              required
-            />
+            {/* Campo de Teléfono */}
+            <Box display="flex" alignItems="center">
+              {/* Select para el código de área (por ejemplo, "2" */}
+              <FormControl margin="normal">
+                <Select
+                  name="telefonoCodigo"
+                  value={formData.telefonoCodigo}
+                  onChange={handleChange}
+                  required
+                >
+                  <MenuItem value="412">412</MenuItem>
+                  <MenuItem value="414">414</MenuItem>
+                  <MenuItem value="424">424</MenuItem>
+                  <MenuItem value="416">416</MenuItem>
+                  <MenuItem value="426">426</MenuItem>
+                </Select>
+              </FormControl>
+
+              {/* Input para el número de teléfono */}
+              <TextField
+                label="Número de Teléfono"
+                name="telefono"
+                value={formData.telefono}
+                onChange={handleChange}
+                margin="normal"
+                required
+              />
+            </Box>
             <TextField
               fullWidth
               label="Referencia"

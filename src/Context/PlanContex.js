@@ -10,7 +10,6 @@ export const PlanProvider = ({ children }) => {
 
   const selectPlan = (plan) => {
     setSelectedPlan(plan); // Actualiza el plan seleccionado
-    console.log("plan seleccionado:",selectPlan)
   };
 
   return (

@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import React, { useState } from 'react';
 import { AppBar, Toolbar, Button, IconButton, Menu, MenuItem, useMediaQuery } from '@mui/material';
@@ -21,7 +21,7 @@ const Nav = () => {
   };
 
   return (
-    <AppBar position="static">
+    <AppBar position="static" sx={{ backgroundColor: 'white' }}> {/* Cambiamos el color de fondo a blanco */}
       <Toolbar>
         {/* Logo */}
         <div style={{ flexGrow: 1, display: 'flex', alignItems: 'center' }}>
@@ -32,23 +32,31 @@ const Nav = () => {
         {!isMobile && (
           <div style={{ display: 'flex', gap: '20px', alignItems: 'center' }}>
             <Link href="/">
-              <Button color="inherit">Inicio</Button>
+              <Button sx={{ color: '#444' }}> {/* Color gris oscuro para los enlaces */}
+                Inicio
+              </Button>
             </Link>
             <Link href="/Formulario">
-              <Button color="inherit">Servicios</Button>
+              <Button sx={{ color: '#444' }}> {/* Color gris oscuro para los enlaces */}
+                Servicios
+              </Button>
             </Link>
             <Link href="/#plans">
-              <Button color="inherit">Nosotros</Button>
+              <Button sx={{ color: '#444' }}> {/* Color gris oscuro para los enlaces */}
+                Nosotros
+              </Button>
             </Link>
 
-            {/* Botón de contacto */}
-            <Button variant="contained" color="primary">Contactanos</Button>
+            {/* Botón de contacto con color naranja */}
+            <Button variant="contained" sx={{ backgroundColor: '#ff7f00', color: 'white' }}> {/* Naranja */}
+              Contactanos
+            </Button>
           </div>
         )}
 
         {/* Menú para dispositivos móviles */}
         {isMobile && (
-          <IconButton color="inherit" onClick={handleMenuOpen}>
+          <IconButton color="primary" onClick={handleMenuOpen}> {/* Icono de menú con color primario */}
             <MdMenu />
           </IconButton>
         )}

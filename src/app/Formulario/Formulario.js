@@ -70,6 +70,7 @@ const Formulario = () => {
           <Typography variant="h6">Plan Seleccionado</Typography>
           <Typography><strong>Nombre:</strong> {selectedPlan.title}</Typography>
           <Typography><strong>Precio:</strong> ${selectedPlan.precio}</Typography>
+          <Typography><strong>Precio:</strong> ${selectedPlan.bolivares}</Typography>
         </Box>
       )}
 

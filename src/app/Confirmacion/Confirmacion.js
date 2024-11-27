@@ -90,16 +90,13 @@ const Confirmation = () => {
             </TableRow>
             <TableRow>
               <TableCell>Teléfono</TableCell>
-              <TableCell>{telefono}</TableCell>
+              <TableCell>{telefonoCodigo}{telefono}</TableCell>
             </TableRow>
             <TableRow>
               <TableCell>Referencia</TableCell>
               <TableCell>{referencia}</TableCell>
             </TableRow>
-            <TableRow>
-              <TableCell>Código de Teléfono</TableCell>
-              <TableCell>{telefonoCodigo}</TableCell>
-            </TableRow>
+            
           </TableBody>
         </Table>
       </TableContainer>

@@ -1,0 +1,49 @@
+/* Hero.module.css */
+
+/* Contenedor principal */
+.sustainable-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 50px;
+  background-color: #f4f4f4; /* Color de fondo */
+  text-align: center;
+  height: 100vh;
+}
+
+/* Contenedor de texto */
+.text-container {
+  margin-bottom: 30px;
+}
+
+.text-container h1 {
+  font-size: 2.5rem;
+  margin-bottom: 10px;
+  font-weight: bold;
+}
+
+/* Estilo del texto destacado */
+.highlight {
+  color: #27ae60; /* Color verde para resaltar */
+}
+
+/* Estilo del párrafo */
+.text-container p {
+  font-size: 1.2rem;
+  color: #666;
+}
+
+/* Contenedor de la imagen */
+.content-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Estilo de la imagen */
+.sustainable-image {
+  max-width: 100%;
+  height: auto;
+  border-radius: 10px; /* Ajusta esto si quieres bordes redondeados */
+}

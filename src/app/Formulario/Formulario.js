@@ -1,5 +1,5 @@
 "use client";
-import { useRouter } from 'next/navigation'; // Hook de navegación de Next.js
+import { useRouter } from "next/navigation"; // Hook de navegación de Next.js
 import React, { useState } from "react";
 import {
   TextField,
@@ -16,11 +16,11 @@ import {
 } from "@mui/material";
 import { usePlanContext } from "@/Context/PlanContex"; // Contexto para obtener el plan seleccionado
 import axios from "axios";
-import { useFormData } from '@/Context/FormDataContext';
+import { useFormData } from "@/Context/FormDataContext";
 
 const Formulario = () => {
   const router = useRouter(); // Instancia del hook useRouter
-  
+
   const { selectedPlan } = usePlanContext(); // Obtener el plan seleccionado del contexto
   const [loading, setLoading] = useState(false); // Definimos el estado de carga (loading)
 
@@ -44,7 +44,7 @@ const Formulario = () => {
   // });
   const { formData, setFormData } = useFormData();
 
-  const steps = ["Información Personal", "Detalles del Pago"];
+  const steps = ["Datos Personales", "Detalles del Pago"];
 
   // Manejar cambios en los campos
   // const handleChange = (e) => {
@@ -134,8 +134,7 @@ const Formulario = () => {
         //   pathname: "/Confirmacion",
         //   query: formData, // Pasamos los datos como parámetros de la URL
         // });
-        router.push('/Confirmacion'); // Redirige a la página de confirmación
-
+        router.push("/Confirmacion"); // Redirige a la página de confirmación
       } catch (error) {
         alert("Error al enviar los datos, intente más tarde");
         console.error("Error al enviar los datos:", error);

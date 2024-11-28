@@ -17,12 +17,14 @@ import {
 import { usePlanContext } from "@/Context/PlanContex"; // Contexto para obtener el plan seleccionado
 import axios from "axios";
 import { useFormData } from "@/Context/FormDataContext";
+import CircularProgress from "@mui/material/CircularProgress";
 
 const Formulario = () => {
   const router = useRouter(); // Instancia del hook useRouter
 
   const { selectedPlan } = usePlanContext(); // Obtener el plan seleccionado del contexto
   const [loading, setLoading] = useState(false); // Definimos el estado de carga (loading)
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Estado para controlar el paso actual
   const [currentStep, setCurrentStep] = useState(0);
@@ -87,6 +89,9 @@ const Formulario = () => {
     e.preventDefault(); // Evita el comportamiento por defecto del formulario
     console.log("Datos del formulario:", formData);
 
+    // Establece el estado de envío en true
+    setIsSubmitting(true);
+
     // Llamar a la función de pago y esperar su resultado
     const pagoExitoso = await handleGuardarPago();
 
@@ -130,10 +135,6 @@ const Formulario = () => {
         console.log("Datos enviados con éxito:", response.data);
 
         // Redirigir a la página de confirmación
-        // router.push({
-        //   pathname: "/Confirmacion",
-        //   query: formData, // Pasamos los datos como parámetros de la URL
-        // });
         router.push("/Confirmacion"); // Redirige a la página de confirmación
       } catch (error) {
         alert("Error al enviar los datos, intente más tarde");
@@ -143,6 +144,9 @@ const Formulario = () => {
       // Si el pago falló, manejar error
       console.log("No se completó el pago, el formulario no será enviado.");
     }
+
+    // Establece el estado de envío en false después de que se haya completado el proceso
+    setIsSubmitting(false);
   };
 
   // Modificación de handleGuardarPago para que devuelva un valor booleano indicando éxito o fracaso
@@ -462,8 +466,17 @@ const Formulario = () => {
               Siguiente
             </Button>
           ) : (
-            <Button type="submit" variant="contained">
-              Enviar
+            <Button
+              type="submit"
+              variant="contained"
+              disabled={isSubmitting}
+              startIcon={
+                isSubmitting ? (
+                  <CircularProgress size={24} color="inherit" />
+                ) : null
+              }
+            >
+              {isSubmitting ? "Enviando..." : "Enviar"}
             </Button>
           )}
         </Box>

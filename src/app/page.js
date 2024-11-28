@@ -4,6 +4,7 @@ import Nav from "@/Components/Nav/Nav";
 import Hero from "@/Components/Hero/Hero";
 import Planes from "@/Components/Planes/Planes";
 import Info from "../app/Info/Info";
+import Footer from "./Footer/Footer";
 
 export default function Home() {
   return (
@@ -12,6 +13,7 @@ export default function Home() {
     <Hero/>
     <Info/>
     <Planes/>
+    <Footer/>
     </div>
   );
 }

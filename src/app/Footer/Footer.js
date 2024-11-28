@@ -2,6 +2,7 @@
 import { Box, Typography, Link as MuiLink, IconButton } from "@mui/material";
 import { BsFacebook, BsTwitter, BsInstagram } from "react-icons/bs";
 import { FaTiktok } from "react-icons/fa";
+import Image from 'next/image';
 
 const Footer = () => {
   const links = [
@@ -26,6 +27,7 @@ const Footer = () => {
     <Box component="footer" sx={{ backgroundColor: "#f1f1f1", py: 4 }}>
       {/* Sección superior con logo y enlaces sociales */}
       <Box display="flex" flexDirection="column" alignItems="center" sx={{ mb: 4 }}>
+        {/* <Image src="/figlogo" alt="logo" width={100} height={100} /> */}
         <MuiLink href="https://backoffice-vivirseguros.vercel.app" color="inherit" sx={{ textDecoration: "none", mt: 2 }}>
           Vivir Seguros
         </MuiLink>

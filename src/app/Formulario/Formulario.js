@@ -426,6 +426,14 @@ const Formulario = () => {
             </Box>
             <TextField
               fullWidth
+              label="Monto"
+              name="referencia"
+              value={selectedPlan.bolivares}
+              margin="normal"
+              aria-readonly
+            />
+            <TextField
+              fullWidth
               label="Referencia"
               name="referencia"
               value={formData.referencia}

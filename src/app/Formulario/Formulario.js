@@ -228,6 +228,12 @@ const Formulario = () => {
           <Typography>
             <strong>Precio Bolivares:</strong> {selectedPlan.bolivares}Bs
           </Typography>
+          <Typography>
+            <strong>Datos de Pago</strong>
+          </Typography>
+          <Typography>BNC - 0191</Typography>
+          <Typography>04242512455</Typography>
+          <Typography>J-300673740</Typography>
         </Box>
       )}
 

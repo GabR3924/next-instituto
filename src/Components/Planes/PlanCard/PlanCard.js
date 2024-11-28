@@ -35,7 +35,7 @@ const PlanCard = ({ plan, onSelect }) => {
           Precio: ${plan.precio}
         </Typography>
         <Typography variant="h6" sx={{ color: "#1976d2", mb: 2 }}>
-          Precio Bolivares: ${plan.bolivares}
+          Precio Bolivares: {plan.bolivares}Bs
         </Typography>
         <Box sx={{ mb: 3 }}>
           {Object.entries(plan.data).map(([key, value]) => (

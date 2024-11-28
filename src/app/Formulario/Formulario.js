@@ -226,7 +226,7 @@ const Formulario = () => {
             <strong>Precio:</strong> ${selectedPlan.precio}
           </Typography>
           <Typography>
-            <strong>Precio:</strong> ${selectedPlan.bolivares}
+            <strong>Precio Bolivares:</strong> {selectedPlan.bolivares}Bs
           </Typography>
         </Box>
       )}

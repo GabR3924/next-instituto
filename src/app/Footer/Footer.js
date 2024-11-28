@@ -16,28 +16,28 @@ const Footer = () => {
     },
   ];
 
-  const socialLink = [
-    <BsFacebook />,
-    <BsTwitter />,
-    <BsInstagram />,
-    <FaTiktok />,
-  ];
+//   const socialLink = [
+//     <BsFacebook />,
+//     <BsTwitter />,
+//     <BsInstagram />,
+//     <FaTiktok />,
+//   ];
 
   return (
     <Box component="footer" sx={{ backgroundColor: "#f1f1f1", py: 4 }}>
       {/* Sección superior con logo y enlaces sociales */}
       <Box display="flex" flexDirection="column" alignItems="center" sx={{ mb: 4 }}>
-        {/* <Image src="/figlogo" alt="logo" width={100} height={100} /> */}
+        <Image src="/figlogo" alt="logo" width={100} height={100} />
         <MuiLink href="https://backoffice-vivirseguros.vercel.app" color="inherit" sx={{ textDecoration: "none", mt: 2 }}>
           Vivir Seguros
         </MuiLink>
-        <Box display="flex" justifyContent="center" mt={2}>
+        {/* <Box display="flex" justifyContent="center" mt={2}>
           {socialLink.map((link, index) => (
             <IconButton key={index} sx={{ margin: "0 8px" }}>
               {link}
             </IconButton>
           ))}
-        </Box>
+        </Box> */}
         {/* Enlace a WhatsApp */}
         <MuiLink 
           href="https://wa.me/04122893886" 

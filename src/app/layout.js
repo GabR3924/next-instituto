@@ -19,7 +19,7 @@ export const metadata = {
   title: "Vivir Seguros",
   description: "Polizas AP",
 };
-
+            
 export default function RootLayout({ children }) {
   return (
     <DataProvider>

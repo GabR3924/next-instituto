@@ -25,41 +25,10 @@ const Formulario = () => {
   const { selectedPlan } = usePlanContext(); // Obtener el plan seleccionado del contexto
   const [loading, setLoading] = useState(false); // Definimos el estado de carga (loading)
   const [isSubmitting, setIsSubmitting] = useState(false);
-
-  // Estado para controlar el paso actual
   const [currentStep, setCurrentStep] = useState(0);
-
-  // Estado para los campos del formulario
-  // const [formData, setFormData] = useState({
-  //   nombre: "",
-  //   apellido: "",
-  //   fechaNacimiento: "",
-  //   direccion: "",
-  //   estado: "",
-  //   correo: "",
-  //   cedulaImagen: null,
-  //   banco: "",
-  //   cedula: "",
-  //   telefono: "",
-  //   referencia: "",
-  //   telefonoCodigo: "412", // Código de área predeterminado
-  // });
   const { formData, setFormData } = useFormData();
-
   const steps = ["Datos Personales", "Detalles del Pago"];
 
-  // Manejar cambios en los campos
-  // const handleChange = (e) => {
-  //   const { name, value } = e.target;
-
-  //   // Mostrar en consola el valor del campo y el estado actualizado
-  //   console.log(`Campo actualizado: ${name} = ${value}`);
-
-  //   setFormData((prevData) => ({
-  //     ...prevData,
-  //     [name]: value,
-  //   }));
-  // };
   const handleChange = (e) => {
     setFormData({
       ...formData,
@@ -112,7 +81,7 @@ const Formulario = () => {
       formDataToSend.append("correo", formData.correo);
       formDataToSend.append("estado", formData.estado);
       formDataToSend.append("direccion", formData.direccion);
-      formDataToSend.append("plan", selectedPlan.nombre);
+      formDataToSend.append("plan", selectedPlan.title);
       formDataToSend.append("paymentData_referencia", formData.referencia);
       formDataToSend.append("paymentData_monto", selectedPlan.bolivares);
       formDataToSend.append("paymentData_banco", formData.banco);

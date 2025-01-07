@@ -1,3 +1,7 @@
+"use client";
+
+import { useEffect } from "react";
+import { useRouter } from "next/router"; // Para manejar rutas dinámicas
 import localFont from "next/font/local";
 import "./globals.css";
 import { DataProvider } from "@/Context/DataContext";
@@ -19,8 +23,21 @@ export const metadata = {
   title: "Vivir Seguros",
   description: "Polizas AP",
 };
-            
+
 export default function RootLayout({ children }) {
+  const router = useRouter();
+
+  useEffect(() => {
+    // Obtén los parámetros de la URL
+    const { codigo, nombre } = router.query;
+
+    if (codigo || nombre) {
+      console.log("Código detectado en la URL:", codigo);
+      console.log("Nombre detectado en la URL:", nombre);
+      console.log("Nombre detectado en la URL:", nombre);
+    }
+  }, [router.query]);
+
   return (
     <DataProvider>
       <PlanProvider>

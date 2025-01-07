@@ -5,6 +5,7 @@ import Hero from "@/Components/Hero/Hero";
 import Planes from "@/Components/Planes/Planes";
 import Info from "../app/Info/Info";
 import Footer from "./Footer/Footer";
+import QR from "./QR/[codigo]/page";
 
 export default function Home() {
   return (
@@ -14,6 +15,7 @@ export default function Home() {
     <Info/>
     <Planes/>
     <Footer/>
+    <QR/>
     </div>
   );
 }

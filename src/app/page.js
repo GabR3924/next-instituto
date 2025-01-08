@@ -38,19 +38,6 @@ export default function Home() {
       <Info />
       <Planes />
       <Footer />
-
-      {/* Agrega una sección condicional para mostrar los datos detectados */}
-      {codigo && nombre ? (
-        <div>
-          <h1>Datos detectados:</h1>
-          <p>Código: {codigo}</p>
-          <p>Nombre: {nombre}</p>
-        </div>
-      ) : (
-        <div>
-          <h1>No se detectaron datos en la URL.</h1>
-        </div>
-      )}
     </div>
   );
 }

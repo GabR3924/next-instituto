@@ -1,10 +1,13 @@
 'use client';
+
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/router';
+import { useSearchParams } from 'next/navigation'; // Nuevo hook para capturar parámetros de la URL
 
 const QR = () => {
-  const router = useRouter();
-  const { codigo, nombre } = router.query; // Captura automáticamente los parámetros de la URL
+  const searchParams = useSearchParams();
+  const codigo = searchParams.get('codigo'); // Obtiene el valor del parámetro "codigo"
+  const nombre = searchParams.get('nombre'); // Obtiene el valor del parámetro "nombre"
+
   const [tienda, setTienda] = useState(null);
   const [error, setError] = useState(null);
 
@@ -25,7 +28,6 @@ const QR = () => {
         <div>
           <h1>{tienda.NOMBRE}</h1>
           <p>Código: {tienda.codigo}</p>
-          {/* Agrega más información aquí si es necesario */}
         </div>
       ) : error ? (
         <div>

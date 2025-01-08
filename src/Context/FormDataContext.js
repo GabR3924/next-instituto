@@ -19,12 +19,13 @@ export const FormDataProvider = ({ children }) => {
     telefono: "",
     referencia: "",
     telefonoCodigo: "412", // Código de área predeterminado
+    codigo: null, // Código que vamos a manejar en Home
   });
 
-   // useEffect para escuchar cambios en formData
-   useEffect(() => {
+  // useEffect para escuchar cambios en formData
+  useEffect(() => {
     console.log("formData actualizado:", formData);
-  }, [formData]); // Este efecto se ejecutará cada vez que formData cambie
+  }, [formData]);
 
   return (
     <FormDataContext.Provider value={{ formData, setFormData }}>

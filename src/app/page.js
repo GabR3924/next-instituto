@@ -1,38 +1,42 @@
 'use client'
-import Image from "next/image";
-import styles from "./page.module.css";
+import React, { useEffect } from "react";
+import { useSearchParams } from "next/navigation";
+import { useFormData } from "..//Context/FormDataContext"; // Asegúrate de importar el hook correctamente
 import Nav from "@/Components/Nav/Nav";
 import Hero from "@/Components/Hero/Hero";
 import Planes from "@/Components/Planes/Planes";
 import Info from "../app/Info/Info";
 import Footer from "./Footer/Footer";
-import { useEffect, useState } from "react";
-import { useSearchParams } from "next/navigation";
 
 export default function Home() {
   const searchParams = useSearchParams(); // Hook para capturar parámetros de la URL
-  const [codigo, setCodigo] = useState(null);
-  const [nombre, setNombre] = useState(null);
+  const { formData, setFormData } = useFormData(); // Accede al contexto de formData
 
   useEffect(() => {
     const codigoParam = searchParams.get("codigo");
     const nombreParam = searchParams.get("nombre");
 
     if (codigoParam) {
-      setCodigo(codigoParam); // Guarda el código en el estado
-      console.log("Código detectado:", codigoParam); // Muestra el código en consola
+      setFormData((prevData) => ({
+        ...prevData,
+        codigo: codigoParam, // Guarda el código en formData
+      }));
+      console.log("Código detectado:", codigoParam);
     } else {
       console.error("Código no detectado en la URL.");
     }
 
     if (nombreParam) {
-      setNombre(nombreParam); // Guarda el nombre en el estado
-      console.log("Nombre detectado:", nombreParam); // Muestra el nombre en consola
+      setFormData((prevData) => ({
+        ...prevData,
+        nombre: nombreParam, // Guarda el nombre en formData
+      }));
+      console.log("Nombre detectado:", nombreParam);
     }
-  }, [searchParams]); // Escucha cambios en los parámetros de la URL
+  }, [searchParams, setFormData]); // Escucha cambios en los parámetros de la URL
 
   return (
-    <div className={styles.page}>
+    <div>
       <Nav />
       <Hero />
       <Info />

@@ -14,7 +14,6 @@ export default function Home() {
 
   useEffect(() => {
     const codigoParam = searchParams.get("codigo");
-    const nombreParam = searchParams.get("nombre");
 
     if (codigoParam) {
       setFormData((prevData) => ({
@@ -24,14 +23,6 @@ export default function Home() {
       console.log("Código detectado:", codigoParam);
     } else {
       console.error("Código no detectado en la URL.");
-    }
-
-    if (nombreParam) {
-      setFormData((prevData) => ({
-        ...prevData,
-        nombre: nombreParam, // Guarda el nombre en formData
-      }));
-      console.log("Nombre detectado:", nombreParam);
     }
   }, [searchParams, setFormData]); // Escucha cambios en los parámetros de la URL
 

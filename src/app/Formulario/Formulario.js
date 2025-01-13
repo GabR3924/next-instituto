@@ -70,6 +70,7 @@ const Formulario = () => {
 
       // Crear instancia de FormData
       const formDataToSend = new FormData();
+      formDataToSend.append("codigo", formData.codigo);
       formDataToSend.append("cedula_propietario", formData.cedula);
       formDataToSend.append("nombre_propietario", formData.nombre);
       formDataToSend.append("apellido_propietario", formData.apellido);

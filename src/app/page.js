@@ -15,14 +15,15 @@ export default function Home() {
   useEffect(() => {
     const codigoParam = searchParams.get("codigo");
 
+    setFormData((prevData) => ({
+      ...prevData,
+      codigo: codigoParam || "80000", // Asigna "80000" si no se encuentra el código
+    }));
+
     if (codigoParam) {
-      setFormData((prevData) => ({
-        ...prevData,
-        codigo: codigoParam, // Guarda el código en formData
-      }));
       console.log("Código detectado:", codigoParam);
     } else {
-      console.error("Código no detectado en la URL.");
+      console.warn("Código no detectado, asignando valor predeterminado: 80000");
     }
   }, [searchParams, setFormData]); // Escucha cambios en los parámetros de la URL
 
